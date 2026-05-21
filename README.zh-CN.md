@@ -56,8 +56,8 @@ RELAY_API_KEY=change-me-to-a-long-random-string
 
 # Optional: dashboard request log storage.
 # LOG_BODY_LIMIT=2000000
-# LOG_STORE_LIMIT=20
-# LOG_FILE=logs/requests.jsonl
+# LOG_STORE_LIMIT=50
+# LOG_DB=logs/requests.sqlite3
 ```
 
 `UPSTREAM_RESPONSES_API_URL` 是转换后 Cursor 请求使用的完整上游 Responses API endpoint。
@@ -91,7 +91,7 @@ RELAY_API_KEY=change-me-to-a-long-random-string
 ```
 
 ngrok 自身日志会写到 `logs/ngrok-agent.log`。
-Dashboard 请求日志默认以 JSONL 格式写到 `logs/requests.jsonl`。
+Dashboard 请求日志默认写入 SQLite：`logs/requests.sqlite3`。
 
 停止：
 

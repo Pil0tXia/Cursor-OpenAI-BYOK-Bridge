@@ -1,6 +1,7 @@
 """Proxy logic: forward requests upstream and adapt Responses payloads."""
 
 import json
+import logging
 import time
 import uuid
 from contextlib import asynccontextmanager
@@ -24,6 +25,8 @@ from .utils import (
     sanitize_headers_for_log,
     truncate_text,
 )
+
+LOGGER = logging.getLogger(__name__)
 
 HOP_BY_HOP_HEADERS = {
     "connection",
@@ -95,6 +98,13 @@ def unauthorized_response() -> JSONResponse:
 
 def finalize_log(entry: dict) -> None:
     entry["duration_ms"] = int((time.time() - entry["started_at_ts"]) * 1000)
+
+
+def safe_store_log(entry: dict) -> None:
+    try:
+        store_log(entry)
+    except Exception:
+        LOGGER.exception("Failed to store dashboard request log")
 
 
 def append_stream_preview(entry: dict, event_type: str, preview: str) -> None:
@@ -246,7 +256,7 @@ async def _handle_proxy(app: FastAPI, full_path: str, request: Request):
             "started_at_ts": time.time(),
         }
         finalize_log(log_entry)
-        store_log(log_entry)
+        safe_store_log(log_entry)
         return JSONResponse(
             status_code=500,
             content={
@@ -289,7 +299,7 @@ async def _handle_proxy(app: FastAPI, full_path: str, request: Request):
         log_entry["response_status"] = 502
         log_entry["error"] = str(exc)
         finalize_log(log_entry)
-        store_log(log_entry)
+        safe_store_log(log_entry)
         return JSONResponse(
             status_code=502,
             content={
@@ -343,7 +353,7 @@ async def _handle_proxy(app: FastAPI, full_path: str, request: Request):
         decode_body(content), config.LOG_BODY_LIMIT
     )
     finalize_log(log_entry)
-    store_log(log_entry)
+    safe_store_log(log_entry)
 
     return Response(
         content=content,
@@ -631,7 +641,7 @@ async def _handle_stream(
                 for p in previews
             )
             finalize_log(log_entry)
-            store_log(log_entry)
+            safe_store_log(log_entry)
 
     return StreamingResponse(
         event_stream(),

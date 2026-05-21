@@ -53,7 +53,7 @@ REASONING_OVERRIDE = _get_bool("REASONING_OVERRIDE", False)
 
 # Logging & Dashboard
 LOG_BODY_LIMIT = _get_int("LOG_BODY_LIMIT", 2000000)
-LOG_STORE_LIMIT = _get_int("LOG_STORE_LIMIT", 20)
-LOG_FILE = os.getenv("LOG_FILE", "logs/requests.jsonl")
+LOG_STORE_LIMIT = _get_int("LOG_STORE_LIMIT", 50)
+LOG_DB = os.getenv("LOG_DB", "logs/requests.sqlite3")
 DASHBOARD_ENABLED = _get_bool("DASHBOARD_ENABLED", True)
 DASHBOARD_TITLE = os.getenv("DASHBOARD_TITLE", "BYOK Relay Logs")

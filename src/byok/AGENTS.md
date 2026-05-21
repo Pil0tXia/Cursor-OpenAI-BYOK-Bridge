@@ -7,7 +7,7 @@ Core relay package: request routing, Responses compatibility transforms, environ
 ```text
 src/byok/
 |- proxy.py             # main FastAPI app + forwarding + streaming adapter
-|- log_store.py         # disk-backed dashboard request log storage
+|- log_store.py         # SQLite-backed dashboard request log storage
 |- responses_compat.py  # payload conversion primitives
 |- config.py            # env loaders and defaults
 |- utils.py             # log-safe helpers

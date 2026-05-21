@@ -56,8 +56,8 @@ RELAY_API_KEY=change-me-to-a-long-random-string
 
 # Optional: dashboard request log storage.
 # LOG_BODY_LIMIT=2000000
-# LOG_STORE_LIMIT=20
-# LOG_FILE=logs/requests.jsonl
+# LOG_STORE_LIMIT=50
+# LOG_DB=logs/requests.sqlite3
 ```
 
 `UPSTREAM_RESPONSES_API_URL` is the full upstream Responses API endpoint used for converted Cursor requests.
@@ -91,7 +91,7 @@ If you want to expose the local Bridge through ngrok, use:
 ```
 
 ngrok's own agent log is written to `logs/ngrok-agent.log`.
-Dashboard request logs are stored as JSONL in `logs/requests.jsonl` by default.
+Dashboard request logs are stored in SQLite at `logs/requests.sqlite3` by default.
 
 Stop:
 
