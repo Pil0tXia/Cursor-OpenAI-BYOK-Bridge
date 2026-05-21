@@ -176,7 +176,7 @@ def create_app() -> FastAPI:
 
     register_routes(app)
 
-    @app.get("/health/liveliness")
+    @app.api_route("/health/liveliness", methods=["GET", "HEAD", "POST"])
     async def health_liveliness():
         return {"status": "ok"}
 
