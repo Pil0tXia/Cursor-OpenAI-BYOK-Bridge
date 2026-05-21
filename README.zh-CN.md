@@ -93,6 +93,17 @@ RELAY_API_KEY=change-me-to-a-long-random-string
 ngrok 自身日志会写到 `logs/ngrok-agent.log`。
 Dashboard 请求日志默认写入 SQLite：`logs/requests.sqlite3`。
 
+## Dashboard
+
+Dashboard 默认开启，访问服务根路径即可：
+
+```text
+http://localhost:8082/
+```
+
+在 dashboard 的 key 输入框里填入 `RELAY_API_KEY`，即可查看和清空请求日志。
+它会展示请求元信息、脱敏后的 headers、转换前后的请求体、上游响应和流式响应预览。
+
 停止：
 
 ```bash

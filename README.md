@@ -93,6 +93,17 @@ If you want to expose the local Bridge through ngrok, use:
 ngrok's own agent log is written to `logs/ngrok-agent.log`.
 Dashboard request logs are stored in SQLite at `logs/requests.sqlite3` by default.
 
+## Dashboard
+
+The dashboard is enabled by default at the service root:
+
+```text
+http://localhost:8082/
+```
+
+Use your `RELAY_API_KEY` in the dashboard key field to view and clear request logs.
+It shows request metadata, sanitized headers, transformed request bodies, upstream responses, and streaming previews.
+
 Stop:
 
 ```bash
