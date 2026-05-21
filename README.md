@@ -108,6 +108,10 @@ ngrok 自身日志会写到 `logs/ngrok-agent.log`。
 - 因此你配置给 Cursor 的 Base URL 必须能被公网访问
 - 运行时必须有 `.env`
 
+## 致谢
+
+感谢 [gaoyu06/Cursor-BYOK-Bridge](https://github.com/gaoyu06/Cursor-BYOK-Bridge) 为本项目提供的灵感。
+
 ## License
 
 Apache License 2.0. See `LICENSE`.

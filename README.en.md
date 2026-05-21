@@ -107,6 +107,10 @@ Streaming follows the same idea: Responses SSE events come in, Chat Completions 
 - `.env` is required at runtime
 - Do not commit `.env` to GitHub
 
+## Acknowledgements
+
+Thanks to [gaoyu06/Cursor-BYOK-Bridge](https://github.com/gaoyu06/Cursor-BYOK-Bridge) for the exploration and inspiration around Cursor BYOK compatibility.
+
 ## License
 
 Apache License 2.0. See `LICENSE`.
