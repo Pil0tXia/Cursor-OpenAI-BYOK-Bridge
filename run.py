@@ -14,7 +14,11 @@ import uvicorn
 PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-REQUIRED_ENV_VARS = ("UPSTREAM_BASE_URL", "UPSTREAM_API_KEY", "RELAY_API_KEY")
+REQUIRED_ENV_VARS = (
+    "UPSTREAM_RESPONSES_API_URL",
+    "UPSTREAM_API_KEY",
+    "RELAY_API_KEY",
+)
 
 
 def load_dotenv(dotenv_path: Path) -> None:
@@ -55,7 +59,7 @@ def main() -> int:
     host = args.host or byok_config.HOST
     port = int(args.port or byok_config.PORT)
     print(f"Starting adapter on http://{host}:{port}")
-    print(f"Forwarding upstream requests to {byok_config.UPSTREAM_BASE_URL}")
+    print(f"Forwarding upstream requests to {byok_config.UPSTREAM_RESPONSES_API_URL}")
     uvicorn.run(app, host=host, port=port, log_level="info")
     return 0
 

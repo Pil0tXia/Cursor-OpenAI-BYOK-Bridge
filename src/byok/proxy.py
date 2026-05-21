@@ -41,9 +41,9 @@ REQUEST_LOGS = []
 
 
 def resolve_upstream_url(route_mode: str) -> str:
-    endpoint = config.UPSTREAM_BASE_URL.rstrip("/")
+    endpoint = config.UPSTREAM_RESPONSES_API_URL.rstrip("/")
     if not endpoint:
-        raise ValueError("UPSTREAM_BASE_URL is empty")
+        raise ValueError("UPSTREAM_RESPONSES_API_URL is empty")
 
     responses_marker = "/responses"
     chat_marker = "/chat/completions"
@@ -51,15 +51,15 @@ def resolve_upstream_url(route_mode: str) -> str:
     if route_mode == "responses-compat":
         if endpoint.endswith(responses_marker):
             return endpoint
-        if endpoint.endswith(chat_marker):
-            return endpoint[: -len(chat_marker)] + responses_marker
     else:
         if endpoint.endswith(chat_marker):
             return endpoint
         if endpoint.endswith(responses_marker):
             return endpoint[: -len(responses_marker)] + chat_marker
 
-    raise ValueError("UPSTREAM_BASE_URL must end with /chat/completions or /responses")
+    raise ValueError(
+        "UPSTREAM_RESPONSES_API_URL must end with /responses for converted Cursor requests"
+    )
 
 
 def filter_headers(headers) -> dict:

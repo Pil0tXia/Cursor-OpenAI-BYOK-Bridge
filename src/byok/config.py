@@ -36,8 +36,8 @@ def _get_csv_set(name: str) -> set[str]:
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = _get_int("PORT", 8082)
 
-# Upstream (OpenAI-compatible API)
-UPSTREAM_BASE_URL = os.getenv("UPSTREAM_BASE_URL", "").rstrip("/")
+# Upstream (OpenAI-compatible Responses API)
+UPSTREAM_RESPONSES_API_URL = os.getenv("UPSTREAM_RESPONSES_API_URL", "").rstrip("/")
 UPSTREAM_API_KEY = os.getenv("UPSTREAM_API_KEY", "")
 UPSTREAM_API_KEY_HEADER = (
     os.getenv("UPSTREAM_API_KEY_HEADER", "authorization").strip().lower()

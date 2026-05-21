@@ -19,7 +19,7 @@ src/byok/
 | Add/adjust route-mode logic | `src/byok/proxy.py` | `is_chat_completions_path`, `_handle_proxy` |
 | Change Responses payload detection | `src/byok/responses_compat.py` | `looks_like_responses_payload` |
 | Change field stripping | `src/byok/responses_compat.py` | `sanitize_responses_payload` |
-| Tune upstream forwarding | `src/byok/proxy.py` | request headers + `UPSTREAM_BASE_URL` |
+| Tune upstream forwarding | `src/byok/proxy.py` | request headers + `UPSTREAM_RESPONSES_API_URL` |
 | Tune secret masking/truncation | `src/byok/utils.py` | `mask_secret`, `sanitize_headers_for_log`, `truncate_text` |
 | Add env variables | `src/byok/config.py` | keep bool/int parser pattern |
 

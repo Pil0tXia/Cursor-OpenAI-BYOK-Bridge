@@ -65,4 +65,4 @@ python -m compileall ./src ./run.py
 ## NOTES
 - No CI workflow directory exists in this repository.
 - No automated test suite is currently present.
-- `.env` is required at runtime for `UPSTREAM_BASE_URL`, `UPSTREAM_API_KEY`, `RELAY_API_KEY`.
+- `.env` is required at runtime for `UPSTREAM_RESPONSES_API_URL`, `UPSTREAM_API_KEY`, `RELAY_API_KEY`.
