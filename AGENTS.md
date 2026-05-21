@@ -42,7 +42,7 @@ LSP symbol map unavailable in this environment (`basedpyright` not installed). U
 ## CONVENTIONS
 - Env-first configuration only; no external config file parsing.
 - In logs, secrets are masked and payloads truncated by `LOG_BODY_LIMIT`.
-- Responses-style POSTs on chat-completions path are rerouted to `/v1/responses` automatically.
+- Responses-style POSTs on chat-completions path are routed to the configured Responses API endpoint.
 - `x-byok-route-mode` response header indicates `chat-completions` vs `responses-compat`.
 
 ## ANTI-PATTERNS (THIS PROJECT)
@@ -52,7 +52,7 @@ LSP symbol map unavailable in this environment (`basedpyright` not installed). U
 
 ## UNIQUE STYLES
 - Uses one catch-all FastAPI route for proxying all methods and paths.
-- Keeps in-memory rolling request log (`REQUEST_LOGS`) with explicit max size.
+- Keeps disk-backed dashboard request logs with explicit max count.
 - Adapts both function and custom tool call streaming deltas into Chat Completions chunk schema.
 
 ## COMMANDS

@@ -17,6 +17,7 @@ from .responses_compat import (
     responses_to_chat_completion,
     sanitize_responses_payload,
 )
+from .log_store import store_log
 from .utils import (
     decode_body,
     now_iso,
@@ -36,9 +37,6 @@ HOP_BY_HOP_HEADERS = {
     "transfer-encoding",
     "upgrade",
 }
-
-REQUEST_LOGS = []
-
 
 def resolve_upstream_url(route_mode: str) -> str:
     endpoint = config.UPSTREAM_RESPONSES_API_URL.rstrip("/")
@@ -93,13 +91,6 @@ def unauthorized_response() -> JSONResponse:
         status_code=401,
         content={"error": {"message": "Unauthorized", "type": "auth_error"}},
     )
-
-
-def store_log(entry: dict) -> None:
-    if not config.DASHBOARD_ENABLED:
-        return
-    REQUEST_LOGS.insert(0, entry)
-    del REQUEST_LOGS[config.LOG_STORE_LIMIT :]
 
 
 def finalize_log(entry: dict) -> None:

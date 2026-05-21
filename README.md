@@ -53,6 +53,11 @@ RELAY_API_KEY=change-me-to-a-long-random-string
 # REASONING_EFFORT=minimal|low|medium|high
 # REASONING_MODELS=azure/gpt-5.4,gpt-5.5
 # REASONING_OVERRIDE=true
+
+# Optional: dashboard request log storage.
+# LOG_BODY_LIMIT=2000000
+# LOG_STORE_LIMIT=20
+# LOG_FILE=logs/requests.jsonl
 ```
 
 `UPSTREAM_RESPONSES_API_URL` is the full upstream Responses API endpoint used for converted Cursor requests.
@@ -86,6 +91,7 @@ If you want to expose the local Bridge through ngrok, use:
 ```
 
 ngrok's own agent log is written to `logs/ngrok-agent.log`.
+Dashboard request logs are stored as JSONL in `logs/requests.jsonl` by default.
 
 Stop:
 

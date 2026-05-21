@@ -7,6 +7,7 @@ Core relay package: request routing, Responses compatibility transforms, environ
 ```text
 src/byok/
 |- proxy.py             # main FastAPI app + forwarding + streaming adapter
+|- log_store.py         # disk-backed dashboard request log storage
 |- responses_compat.py  # payload conversion primitives
 |- config.py            # env loaders and defaults
 |- utils.py             # log-safe helpers
@@ -20,6 +21,7 @@ src/byok/
 | Change Responses payload detection | `src/byok/responses_compat.py` | `looks_like_responses_payload` |
 | Change field stripping | `src/byok/responses_compat.py` | `sanitize_responses_payload` |
 | Tune upstream forwarding | `src/byok/proxy.py` | request headers + `UPSTREAM_RESPONSES_API_URL` |
+| Tune log persistence | `src/byok/log_store.py` | `store_log`, `read_logs`, `clear_logs` |
 | Tune secret masking/truncation | `src/byok/utils.py` | `mask_secret`, `sanitize_headers_for_log`, `truncate_text` |
 | Add env variables | `src/byok/config.py` | keep bool/int parser pattern |
 
@@ -33,7 +35,7 @@ src/byok/
 - Do not duplicate secret masking logic in route handlers.
 - Do not mutate `request.headers`; build new filtered header dict.
 - Do not return raw Responses payload on compat path once conversion to chat-completion is expected.
-- Do not let in-memory `REQUEST_LOGS` grow unbounded; always respect `LOG_STORE_LIMIT`.
+- Do not let dashboard logs grow unbounded; always respect `LOG_STORE_LIMIT`.
 
 ## LOCAL GOTCHAS
 - `route_mode` changes both target path and downstream response conversion.

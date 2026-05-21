@@ -52,7 +52,8 @@ REASONING_MODELS = _get_csv_set("REASONING_MODELS")
 REASONING_OVERRIDE = _get_bool("REASONING_OVERRIDE", False)
 
 # Logging & Dashboard
-LOG_BODY_LIMIT = _get_int("LOG_BODY_LIMIT", 20000)
-LOG_STORE_LIMIT = _get_int("LOG_STORE_LIMIT", 200)
+LOG_BODY_LIMIT = _get_int("LOG_BODY_LIMIT", 2000000)
+LOG_STORE_LIMIT = _get_int("LOG_STORE_LIMIT", 20)
+LOG_FILE = os.getenv("LOG_FILE", "logs/requests.jsonl")
 DASHBOARD_ENABLED = _get_bool("DASHBOARD_ENABLED", True)
 DASHBOARD_TITLE = os.getenv("DASHBOARD_TITLE", "BYOK Relay Logs")

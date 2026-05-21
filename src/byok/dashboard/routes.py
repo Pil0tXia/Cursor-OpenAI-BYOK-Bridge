@@ -7,7 +7,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from .. import config
-from ..proxy import REQUEST_LOGS, is_authorized, unauthorized_response
+from ..log_store import clear_logs, read_log_detail, read_log_summaries
+from ..proxy import is_authorized, unauthorized_response
 
 TEMPLATE_PATH = Path(__file__).parent / "templates" / "index.html"
 
@@ -33,11 +34,23 @@ def register_routes(app: FastAPI) -> None:
         async def get_logs(req: Request):
             if not is_authorized(req):
                 return unauthorized_response()
-            return {"logs": REQUEST_LOGS}
+            return {"logs": read_log_summaries()}
+
+        @app.get("/api/logs/{log_id}")
+        async def get_log_detail(log_id: str, req: Request):
+            if not is_authorized(req):
+                return unauthorized_response()
+            log = read_log_detail(log_id)
+            if log is None:
+                return JSONResponse(
+                    status_code=404,
+                    content={"error": {"message": "Log not found", "type": "not_found"}},
+                )
+            return {"log": log}
 
         @app.delete("/api/logs")
         async def delete_logs(req: Request):
             if not is_authorized(req):
                 return unauthorized_response()
-            REQUEST_LOGS.clear()
+            clear_logs()
             return {"ok": True}

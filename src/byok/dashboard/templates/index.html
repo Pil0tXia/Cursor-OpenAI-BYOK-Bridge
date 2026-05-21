@@ -161,6 +161,7 @@
     const statusNode = document.getElementById('status');
     let logs = [];
     let activeId = null;
+    const logDetails = new Map();
 
     apiKeyInput.value = localStorage.getItem('byokRelayApiKey') || '';
 
@@ -232,13 +233,41 @@
         node.addEventListener('click', () => {
           activeId = node.dataset.id;
           renderList();
-          renderDetail();
+          loadLogDetail(activeId);
         });
       });
     }
 
-    function renderDetail() {
-      const log = logs.find((item) => item.id === activeId);
+    async function loadLogDetail(logId) {
+      if (!logId) {
+        renderDetail(null);
+        return;
+      }
+      if (logDetails.has(logId)) {
+        renderDetail(logDetails.get(logId));
+        return;
+      }
+
+      detailView.innerHTML = '<div class="empty">Loading log details...</div>';
+      try {
+        const resp = await fetch('/api/logs/' + encodeURIComponent(logId), { headers: authHeaders() });
+        if (!resp.ok) {
+          throw new Error('HTTP ' + resp.status);
+        }
+        const payload = await resp.json();
+        const log = payload.log;
+        logDetails.set(logId, log);
+        if (activeId === logId) {
+          renderDetail(log);
+        }
+      } catch (error) {
+        if (activeId === logId) {
+          detailView.innerHTML = '<div class="empty">Failed to load log details: ' + escapeHtml(error.message) + '</div>';
+        }
+      }
+    }
+
+    function renderDetail(log) {
       if (!log) {
         detailView.innerHTML = '<div class="empty">Select a log entry to view request and response details.</div>';
         return;
@@ -291,6 +320,12 @@
         }
         const payload = await resp.json();
         logs = payload.logs || [];
+        const visibleIds = new Set(logs.map((item) => item.id));
+        Array.from(logDetails.keys()).forEach((id) => {
+          if (!visibleIds.has(id)) {
+            logDetails.delete(id);
+          }
+        });
         if (!activeId && logs.length) {
           activeId = logs[0].id;
         }
@@ -298,7 +333,11 @@
           activeId = logs.length ? logs[0].id : null;
         }
         renderList();
-        renderDetail();
+        if (activeId) {
+          loadLogDetail(activeId);
+        } else {
+          renderDetail(null);
+        }
         setStatus('Updated at ' + new Date().toLocaleTimeString());
       } catch (error) {
         setStatus('Failed: ' + error.message);
@@ -316,8 +355,9 @@
         }
         logs = [];
         activeId = null;
+        logDetails.clear();
         renderList();
-        renderDetail();
+        renderDetail(null);
         setStatus('Logs cleared.');
       } catch (error) {
         setStatus('Clear failed: ' + error.message);
