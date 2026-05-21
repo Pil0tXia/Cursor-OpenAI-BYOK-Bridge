@@ -37,7 +37,8 @@ stop_one() {
 }
 
 stop_one bridge
+stop_one ngrok
 
 echo
-echo "Cursor OpenAI BYOK Bridge stopped."
+echo "Cursor OpenAI BYOK Bridge and ngrok stopped."
 echo "Logs remain under: ${LOG_DIR}"

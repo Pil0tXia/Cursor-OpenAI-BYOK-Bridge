@@ -71,13 +71,20 @@ Default addresses:
 - Service: `http://localhost:8082`
 - Endpoint: `http://localhost:8082/v1/chat/completions`
 
-One-command local startup:
+One-command local startup without ngrok:
 
 ```bash
 ./start.sh
 ```
 
-The script starts Bridge and ngrok in the background, then prints the local dashboard and log paths.
+The script starts Bridge in the background, then prints the local dashboard and log path.
+
+If you want to expose the local Bridge through ngrok, use:
+
+```bash
+./start-with-ngrok.sh
+```
+
 ngrok's own agent log is written to `logs/ngrok-agent.log`.
 
 Stop:
@@ -86,10 +93,22 @@ Stop:
 ./stop.sh
 ```
 
+If you started with ngrok, stop both processes with:
+
+```bash
+./stop-with-ngrok.sh
+```
+
 In Cursor BYOK:
 
 - Base URL: `http://your-server:8082/v1`
 - API Key: your `RELAY_API_KEY`
+
+Health Check Path:
+
+```text
+/health/liveliness
+```
 
 ## How it works
 

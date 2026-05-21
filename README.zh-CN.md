@@ -71,13 +71,20 @@ RELAY_API_KEY=change-me-to-a-long-random-string
 - 服务地址：`http://localhost:8082`
 - 接口地址：`http://localhost:8082/v1/chat/completions`
 
-本地一键启动：
+不启动 ngrok 的本地一键启动：
 
 ```bash
 ./start.sh
 ```
 
-脚本会在后台启动 Bridge 和 ngrok，并输出本地 dashboard、日志路径等关键信息。
+脚本会在后台启动 Bridge，并输出本地 dashboard 和日志路径。
+
+如果你希望通过 ngrok 暴露本地 Bridge，使用：
+
+```bash
+./start-with-ngrok.sh
+```
+
 ngrok 自身日志会写到 `logs/ngrok-agent.log`。
 
 停止：
@@ -86,10 +93,22 @@ ngrok 自身日志会写到 `logs/ngrok-agent.log`。
 ./stop.sh
 ```
 
+如果你使用 ngrok 方式启动，用下面的命令同时停止 Bridge 和 ngrok：
+
+```bash
+./stop-with-ngrok.sh
+```
+
 在 Cursor BYOK 里填写：
 
 - Base URL: `http://your-server:8082/v1`
 - API Key: 你的 `RELAY_API_KEY`
+
+Health Check Path:
+
+```text
+/health/liveliness
+```
 
 ## How it works
 
