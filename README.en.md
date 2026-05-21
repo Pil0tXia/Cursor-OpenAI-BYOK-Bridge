@@ -2,7 +2,7 @@
 
 [中文说明](./README.md)
 
-A very small relay for Cursor BYOK.
+A protocol compatibility bridge for Cursor OpenAI-compatible BYOK: it fixes Cursor Agent's request/response mismatch between `/v1/chat/completions` and the Responses API, making GPT-5-class models, Azure/OpenAI-compatible gateways, and Responses-only routes usable from Cursor.
 
 ## What it is
 
@@ -104,10 +104,9 @@ Streaming follows the same idea: Responses SSE events come in, Chat Completions 
 
 ## Notes
 
-- This is a small utility, not a highly configurable platform
 - `.env` is required at runtime
 - Do not commit `.env` to GitHub
 
 ## License
 
-MIT. See `LICENSE`.
+Apache License 2.0. See `LICENSE`.

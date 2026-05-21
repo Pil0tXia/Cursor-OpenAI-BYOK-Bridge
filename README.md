@@ -2,7 +2,7 @@
 
 [English README](./README.en.md)
 
-一个很小的转发工具，用来给 Cursor 的 BYOK 场景做格式转换。
+面向 Cursor OpenAI-compatible BYOK 场景的协议兼容层：修复 Cursor Agent 在 `/v1/chat/completions` 与 Responses API 之间的请求/响应格式错配，让 GPT-5 系列、Azure/OpenAI-compatible 网关和需要 Responses API 的模型可以稳定接入 Cursor。
 
 ## 这是什么
 
@@ -110,4 +110,4 @@ ngrok 自身日志会写到 `logs/ngrok-agent.log`。
 
 ## License
 
-MIT. See `LICENSE`.
+Apache License 2.0. See `LICENSE`.
