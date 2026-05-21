@@ -107,7 +107,7 @@ In Cursor BYOK:
 Health Check Path:
 
 ```text
-/health/liveliness
+/healthz
 ```
 
 ## How it works

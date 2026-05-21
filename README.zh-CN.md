@@ -107,7 +107,7 @@ ngrok 自身日志会写到 `logs/ngrok-agent.log`。
 Health Check Path:
 
 ```text
-/health/liveliness
+/healthz
 ```
 
 ## How it works
