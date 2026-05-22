@@ -43,7 +43,7 @@ HOP_BY_HOP_HEADERS = {
     "upgrade",
 }
 
-def resolve_upstream_url(route_mode: str) -> str:
+def resolve_upstream_url(target_path: str, route_mode: str) -> str:
     endpoint = config.UPSTREAM_RESPONSES_API_URL.rstrip("/")
     if not endpoint:
         raise ValueError("UPSTREAM_RESPONSES_API_URL is empty")
@@ -51,18 +51,21 @@ def resolve_upstream_url(route_mode: str) -> str:
     responses_marker = "/responses"
     chat_marker = "/chat/completions"
 
-    if route_mode == "responses-compat":
-        if endpoint.endswith(responses_marker):
-            return endpoint
+    if endpoint.endswith(responses_marker):
+        base_url = endpoint[: -len(responses_marker)]
+    elif endpoint.endswith(chat_marker):
+        base_url = endpoint[: -len(chat_marker)]
     else:
-        if endpoint.endswith(chat_marker):
-            return endpoint
-        if endpoint.endswith(responses_marker):
-            return endpoint[: -len(responses_marker)] + chat_marker
+        raise ValueError(
+            "UPSTREAM_RESPONSES_API_URL must end with /responses or /chat/completions"
+        )
 
-    raise ValueError(
-        "UPSTREAM_RESPONSES_API_URL must end with /responses for converted Cursor requests"
-    )
+    normalized_target_path = target_path if target_path.startswith("/") else "/" + target_path
+
+    if route_mode == "responses-compat":
+        return base_url + normalized_target_path
+
+    return base_url + normalized_target_path
 
 
 def filter_headers(headers) -> dict:
@@ -201,6 +204,9 @@ async def _handle_proxy(app: FastAPI, full_path: str, request: Request):
     original_body = body
     route_mode = "chat-completions"
 
+    if not is_authorized(request):
+        return unauthorized_response()
+
     if request.method.upper() == "POST" and is_chat_completions_path(incoming_path):
         try:
             payload = json.loads(body.decode("utf-8")) if body else {}
@@ -235,7 +241,7 @@ async def _handle_proxy(app: FastAPI, full_path: str, request: Request):
             )
 
     try:
-        upstream_url = resolve_upstream_url(route_mode)
+        upstream_url = resolve_upstream_url(target_path, route_mode)
     except ValueError as exc:
         log_entry = {
             "id": str(uuid.uuid4()),
