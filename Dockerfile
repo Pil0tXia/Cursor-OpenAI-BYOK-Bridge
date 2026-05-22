@@ -1,10 +1,18 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+RUN useradd -m -u 1000 user
 
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+USER user
 
-COPY . /app
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
 
-CMD ["python3", "run.py"]
+WORKDIR $HOME/app
+
+COPY --chown=user requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+COPY --chown=user . .
+
+CMD ["python", "run.py"]
