@@ -1,9 +1,3 @@
----
-title: Cursor OpenAI BYOK Bridge
-sdk: docker
-app_port: 7860
----
-
 # Cursor OpenAI BYOK Bridge
 
 [中文说明](./README.zh-CN.md)
