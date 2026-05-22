@@ -67,11 +67,26 @@ def responses_output_to_chat_message(response_payload: dict) -> dict:
     return message
 
 
-def responses_to_chat_completion(response_payload: dict) -> dict:
-    """Convert full Responses API response to Chat Completions format."""
+def responses_usage_to_chat_usage(response_payload: dict) -> dict:
     usage = response_payload.get("usage") or {}
     input_details = usage.get("input_tokens_details") or {}
     output_details = usage.get("output_tokens_details") or {}
+
+    return {
+        "prompt_tokens": usage.get("input_tokens"),
+        "completion_tokens": usage.get("output_tokens"),
+        "total_tokens": usage.get("total_tokens"),
+        "prompt_tokens_details": {
+            "cached_tokens": input_details.get("cached_tokens", 0),
+        },
+        "completion_tokens_details": {
+            "reasoning_tokens": output_details.get("reasoning_tokens", 0),
+        },
+    }
+
+
+def responses_to_chat_completion(response_payload: dict) -> dict:
+    """Convert full Responses API response to Chat Completions format."""
     message = responses_output_to_chat_message(response_payload)
     finish_reason = "tool_calls" if message.get("tool_calls") else "stop"
 
@@ -87,25 +102,15 @@ def responses_to_chat_completion(response_payload: dict) -> dict:
                 "message": message,
             }
         ],
-        "usage": {
-            "prompt_tokens": usage.get("input_tokens"),
-            "completion_tokens": usage.get("output_tokens"),
-            "total_tokens": usage.get("total_tokens"),
-            "prompt_tokens_details": {
-                "cached_tokens": input_details.get("cached_tokens", 0),
-            },
-            "completion_tokens_details": {
-                "reasoning_tokens": output_details.get("reasoning_tokens", 0),
-            },
-        },
+        "usage": responses_usage_to_chat_usage(response_payload),
     }
 
 
 def make_chat_completion_chunk(
-    chunk_id, model, delta, finish_reason=None, created=None
+    chunk_id, model, delta, finish_reason=None, created=None, usage=None
 ):
     """Build a chat completion chunk for SSE streaming."""
-    return {
+    chunk = {
         "id": chunk_id,
         "object": "chat.completion.chunk",
         "created": created or int(time.time()),
@@ -117,6 +122,21 @@ def make_chat_completion_chunk(
                 "finish_reason": finish_reason,
             }
         ],
+    }
+    if usage is not None:
+        chunk["usage"] = usage
+    return chunk
+
+
+def make_chat_completion_usage_chunk(chunk_id, model, created, usage):
+    """Build the final Chat Completions streaming usage chunk."""
+    return {
+        "id": chunk_id,
+        "object": "chat.completion.chunk",
+        "created": created or int(time.time()),
+        "model": model,
+        "choices": [],
+        "usage": usage,
     }
 
 

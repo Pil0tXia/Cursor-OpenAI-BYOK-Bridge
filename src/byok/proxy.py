@@ -12,9 +12,11 @@ from fastapi.responses import JSONResponse, Response, StreamingResponse
 
 from . import config
 from .responses_compat import (
+    make_chat_completion_usage_chunk,
     make_chat_completion_chunk,
     looks_like_responses_payload,
     response_payload_to_tool_calls,
+    responses_usage_to_chat_usage,
     responses_to_chat_completion,
     sanitize_responses_payload,
 )
@@ -624,6 +626,17 @@ async def _handle_stream(
                             finish_reason=finish_reason,
                         )
                     )
+                    if response_payload.get("usage"):
+                        yield make_sse_data(
+                            make_chat_completion_usage_chunk(
+                                chunk_id=response_payload.get("id")
+                                or chunk_id_for_chunks,
+                                model=response_payload.get("model")
+                                or model_for_chunks,
+                                created=response_payload.get("created_at"),
+                                usage=responses_usage_to_chat_usage(response_payload),
+                            )
+                        )
                     if not sent_done:
                         sent_done = True
                         yield make_sse_done()
