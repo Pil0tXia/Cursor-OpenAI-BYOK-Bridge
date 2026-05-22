@@ -5,7 +5,12 @@ RUN useradd -m -u 1000 user
 USER user
 
 ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
+    PATH=/home/user/.local/bin:$PATH \
+    HOST=0.0.0.0 \
+    PORT=7860 \
+    DASHBOARD_ENABLED=true \
+    DASHBOARD_TITLE="BYOK Relay Logs" \
+    LOG_DB=/tmp/byok-requests.sqlite3
 
 WORKDIR $HOME/app
 
