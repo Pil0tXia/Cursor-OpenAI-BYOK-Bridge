@@ -62,8 +62,9 @@ def resolve_upstream_url(target_path: str, route_mode: str) -> str:
 
     normalized_target_path = target_path if target_path.startswith("/") else "/" + target_path
 
-    if route_mode == "responses-compat":
-        return base_url + normalized_target_path
+    # UPSTREAM_RESPONSES_API_URL already includes /v1; Cursor paths often do too.
+    if base_url.endswith("/v1") and normalized_target_path.startswith("/v1/"):
+        normalized_target_path = normalized_target_path[3:]
 
     return base_url + normalized_target_path
 
